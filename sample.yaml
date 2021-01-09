@@ -1,0 +1,64 @@
+%YAML 1.2
+---
+#
+# Input file for yaml2data
+#
+# Jaewoong Jang
+# 2021-01-09
+#
+run:
+  #
+  # All keys but "active_ids" can be overridden at each active ID.
+  #
+  out_path: ./sample_results
+  out_fmts:
+    # key: pandas.DataFrame.to_<key>
+    # val: file extension <val;<kwarg1;kwarg2;...>>
+    # kwarg empty val is recognized as False.
+    csv: csv;encoding=utf-8;index=
+    excel: xlsx
+    html: html
+    latex: tex
+    markdown: md;tablefmt=github  # "pandas >=v1.0.0" and "tabulate" required
+  header:
+    - Name
+    - Nawabari
+    - Age (year)
+    - Gender
+    - Height (cm)
+    - Weight (kg)
+  sep: /  # Try enclosing it with double quotes if a parsing error occurs.
+  active_ids:
+    - id0
+    - id1
+    - id2
+
+id0:
+  out_bname: dogs1
+  data:
+    - Bonbon / Nippori / 3 / Male / 42 / 8.0
+    - Mamechan / Yanaka / 7 / Female / 38 / 9.2
+
+id1:
+  sep: "|"  # Overriding
+  out_bname: dogs2
+  data:
+    - Mimi     | Musashisakai | 2 | Female | 37 | 7.5
+    - Mamesuke | Komaba       | 1 | Male   | 35 | 8.5
+
+id2:
+  header:  # Overriding
+    - Mo-99 production reactor
+    - Country
+    - Global production share as of 2019 (%)
+    - Age as of 2021 (y)
+    - Note
+  out_bname: reactors_2021
+  data:
+    - LVR-15 / Czech Rep. / 7 / 64
+    - HFR / Netherlands / 23 / 59
+    - BR-2 / Belgium / 21/ 59
+    - SAFARI-1 / S. Africa / 13 / 56
+    - Maria / Poland / 9 / 47
+    - OPAL / Australia / 8 / 14 / Youngest
+...

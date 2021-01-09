@@ -1,0 +1,6 @@
+*.lnk
+
+# tilder
+*tilder.bat
+yaml2data.py~/
+sample.yaml~/
