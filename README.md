@@ -4,7 +4,7 @@ yaml2data - Generate multiple data files from a single YAML file
 
 ## SYNOPSIS
 
-    python yaml2data.py [-h] [--file FILE]
+    python yaml2data.py [-h] file
 
 ## DESCRIPTION
 
@@ -13,11 +13,11 @@ yaml2data - Generate multiple data files from a single YAML file
 
 ## OPTIONS
 
+    file FILE
+        YAML file encoded in UTF-8
+
     -h, --help
         Help message
-
-    --file FILE, -f FILE
-        YAML file encoded in UTF-8 (default: None)
 
 ## INPUT FILE SYNTAX
 
@@ -25,7 +25,7 @@ yaml2data - Generate multiple data files from a single YAML file
 
 ## EXAMPLES
 
-    python yaml2data.py -f sample.yaml
+    python yaml2data.py sample.yaml
 
 ## DEPENDENCIES
 
