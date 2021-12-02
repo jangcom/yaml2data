@@ -17,7 +17,6 @@ mk_data(yml, sep_ext_kwargs=';', sep_key_val='='):
 """
 
 import os
-import sys
 import re
 import argparse
 import yaml
@@ -44,7 +43,7 @@ def read_argv(desc=''):
     parser = argparse.ArgumentParser(
         description=desc,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--file', '-f',
+    parser.add_argument('file',
                         help='YAML file encoded in UTF-8')
     return parser.parse_args()
 
@@ -156,14 +155,5 @@ def mk_data(yml,
 
 if __name__ == '__main__':
     argv = read_argv()
-    if not argv.file:
-        # If a YAML file has not been specified, search for it in some dirs.
-        for d in [os.path.dirname(os.path.abspath(__file__)), '.']:
-            argv.file = '{}/sample.yaml'.format(d)
-            if os.path.exists(argv.file):
-                break
-    if not os.path.exists(argv.file):
-        print('YAML file not found. Terminating.')
-        sys.exit()
     the_yml = read_yaml(argv.file)
     mk_data(the_yml)
