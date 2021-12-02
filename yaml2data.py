@@ -148,8 +148,15 @@ def mk_data(yml,
                 for arg in spl[1:]:
                     args += re.split(r'\s*[{}]\s*'.format(sep_key_val), arg)
                 args_dct = {args[i]: args[i+1] for i in range(0, len(args), 2)}
+            if fmt == 'markdown':
+                if 'encoding' in args_dct:
+                    buf = open(out_fname, 'w', encoding=args_dct['encoding'])
+                    del args_dct['encoding']
+                else:
+                    buf = open(out_fname, 'w', encoding='utf-8')  # Default
+            else:  # All but to_markdown()
+                buf = out_fname
             meth_to_call = getattr(df, 'to_{}'.format(fmt))
-            buf = open(out_fname, 'w') if fmt == 'markdown' else out_fname
             meth_to_call(buf, **args_dct)
             rpt_gen(out_fname)
 
