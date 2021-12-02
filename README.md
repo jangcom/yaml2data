@@ -30,7 +30,8 @@ yaml2data - Generate multiple data files from a single YAML file
 ## DEPENDENCIES
 
 - PyYAML v5.1.2 or higher
-- pandas v0.25.1 or higher
+- pandas v1.0.0 or higher
+- tabulate >=v0.8.9 or higher
 
 ## SEE ALSO
 
