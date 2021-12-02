@@ -24,8 +24,8 @@ import yaml
 import pandas as pd
 
 __author__ = 'Jaewoong Jang'
-__version__ = '1.0.0'
-__date__ = '2021-01-09'
+__version__ = '1.0.1'
+__date__ = '2021-12-02'
 
 
 def read_argv(desc=''):
@@ -150,7 +150,8 @@ def mk_data(yml,
                     args += re.split(r'\s*[{}]\s*'.format(sep_key_val), arg)
                 args_dct = {args[i]: args[i+1] for i in range(0, len(args), 2)}
             meth_to_call = getattr(df, 'to_{}'.format(fmt))
-            meth_to_call(out_fname, **args_dct)
+            buf = open(out_fname, 'w') if fmt == 'markdown' else out_fname
+            meth_to_call(buf, **args_dct)
             rpt_gen(out_fname)
 
 
