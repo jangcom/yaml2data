@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""Generate multiple data files from a single YAML file
-
-Generate data files in multiple formats
-using a single YAML file encoded in UTF-8.
+"""yaml2data: Generate multiple data files from a single YAML file
 
 Functions
 ---------
@@ -10,10 +7,12 @@ read_argv(desc='')
     Read in sys.argv.
 read_yaml(file, is_echo=False)
     Read in a YAML file encoded in UTF-8.
+gen_dir(d)
+    Create a directory if it does not exist.
 rpt_gen(fname, is_sq_bracket=True)
     Report file or directory generation.
 mk_data(yml, sep_ext_kwargs=';', sep_key_val='='):
-    Generate data files from a YAML file.
+    Generate data files based on a user input file.
 """
 
 import os
@@ -23,8 +22,8 @@ import yaml
 import pandas as pd
 
 __author__ = 'Jaewoong Jang'
-__version__ = '1.0.1'
-__date__ = '2021-12-02'
+__version__ = '1.0.2'
+__date__ = '2024-01-23'
 
 
 def read_argv(desc=''):
@@ -33,12 +32,12 @@ def read_argv(desc=''):
     Arguments
     ---------
     desc : str
-        The description of argparse.ArgumentParser (default '')
+        The description of argparse.ArgumentParser. The default is ''.
 
     Returns
     -------
     argparse.Namespace
-        The Namespace object of argparse
+        The Namespace object of argparse.
     """
     parser = argparse.ArgumentParser(
         description=desc,
@@ -55,14 +54,14 @@ def read_yaml(file,
     Arguments
     ---------
     file : str
-        YAML file to be read in
+        YAML file to be read in.
     is_echo : bool
-        Dump the YAML file content. (default False)
+        Dump the YAML file content. The default is False.
 
     Returns
     -------
     yaml_loaded : dict
-        YAML file content
+        YAML file content.
     """
     with open(file, encoding='utf-8') as fh:
         yaml_loaded = yaml.load(fh, Loader=yaml.FullLoader)
@@ -74,6 +73,31 @@ def read_yaml(file,
     return yaml_loaded
 
 
+def gen_dir(d):
+    """Create a directory if it does not exist.
+
+    Parameters
+    ----------
+    d : str
+        The name of the directory to be created.
+
+    Returns
+    -------
+    None.
+    """
+    if not os.path.exists(d):
+        d = re.sub(r'\\', '/', d)  # For consistency
+        question = f'The designated directory [{d}] not found. Create (y/n)? '
+        while True:
+            yn = input(question)
+            if not re.search(r'(?i)\b\s*[yn]\s*\b', yn):
+                continue
+            if re.search(r'(?i)y', yn):
+                os.mkdir(d)
+                rpt_gen(d)
+            break
+
+
 def rpt_gen(fname,
             is_sq_bracket=True):
     """Report file or directory generation.
@@ -81,10 +105,14 @@ def rpt_gen(fname,
     Arguments
     ---------
     fname : str
-        File or directory name to be reported.
+        A file or directory name to be reported.
     is_sq_bracket : bool
-        Enclose the file or directory name with
-        a pair of square brackets. (default True)
+        Enclose the file or directory name with a pair of square brackets.
+        The default is True.
+
+    Returns
+    -------
+    None.
     """
     if is_sq_bracket:
         fname = f'[{fname}]'
@@ -93,16 +121,21 @@ def rpt_gen(fname,
 
 def mk_data(yml,
             sep_ext_kwargs=';', sep_key_val='='):
-    """Generate data files from a YAML file.
+    """Generate data files based on a user input file.
 
     Arguments
     ---------
     yml : dict
-        YAML-generated dict containing data specifications.
+        A YAML-generated dict containing data specifications.
     sep_ext_kwargs : str
-        Separator for a file extension and pandas keyword args. (default ';')
+        A separator for a file extension and pandas keyword args.
+        The default is ';'.
     sep_key_val : str
-        Separator for pandas keyword args. (default '=')
+        A separator for pandas keyword args. The default is '='.
+
+    Returns
+    -------
+    None.
     """
     for active in yml['run']['active_ids']:
         if active not in yml:
@@ -121,10 +154,15 @@ def mk_data(yml,
         # Process the data.
         for line in yml[active]['data']:
             spl = re.split(r'\s*[{}]\s*'.format(yml[active]['sep']), line)
+            # Assign NaN to data slots exceeding the number of headings.
             if len(spl) < num_header:
                 num_insufficient = num_header - len(spl)
                 spl += [None] * num_insufficient
             for i in range(num_header):
+                try:
+                    spl[i] = float(spl[i])
+                except ValueError:
+                    spl[i] = spl[i]
                 list_of_lists[i].append(spl[i])
         for i, s in enumerate(yml[active]['header']):
             # e.g. (0, 'Name'), (1, 'Nawabari'), (2, 'Age (year)'), ...
@@ -132,9 +170,8 @@ def mk_data(yml,
         # DF construction
         df = pd.DataFrame(dict_of_lists)
         # File generation
-        if not os.path.exists(yml[active]['out_path']):
-            os.makedirs(yml[active]['out_path'])
-            rpt_gen(yml[active]['out_path'])
+        yml[active]['out_path'] = os.path.expandvars(yml[active]['out_path'])
+        gen_dir(yml[active]['out_path'])
         out_bname_w_path = '{}/{}'.format(yml[active]['out_path'],
                                           yml[active]['out_bname'])
         for fmt, ext_kwargs in yml[active]['out_fmts'].items():
