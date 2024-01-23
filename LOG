@@ -1,8 +1,11 @@
 #
 # yaml2data log
 #
+2024-01-23 (v1.0.2)
+- Numeric data are converted to float.
+
 2021-12-02 (v1.0.1)
-- Markdown-aware buf of to_<fmt> added
+- Markdown-aware buf of to_<fmt> added.
 
 2021-01-09 (v1.0.0)
-- Source code created
+- Source code created.

@@ -27,11 +27,18 @@ yaml2data - Generate multiple data files from a single YAML file
 
     python yaml2data.py sample.yaml
 
-## DEPENDENCIES
+## LIST OF THIRD-PARTY PYTHON PACKAGES
 
-- PyYAML v5.1.2 or higher
-- pandas v1.0.0 or higher
-- tabulate >=v0.8.9 or higher
+| Package    | Version | Repository |
+|------------|---------|------------|
+| pyyaml     | 6.0.1   | anaconda   |
+| openpyxl   | 3.0.10  | anaconda   |
+| pandas     | 2.1.4   | anaconda   |
+
+**Conda configuration steps**
+
+1. conda create -n yaml2data python pyyaml openpyxl pandas
+1. conda activate yaml2data
 
 ## SEE ALSO
 
@@ -43,7 +50,7 @@ Jaewoong Jang \<jangj@korea.ac.kr\>
 
 ## COPYRIGHT
 
-Copyright (c) 2021 Jaewoong Jang
+Copyright (c) 2021-2024 Jaewoong Jang
 
 ## LICENSE
 
