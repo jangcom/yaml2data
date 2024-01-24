@@ -4,7 +4,7 @@
 # Input file for yaml2data
 #
 # Jaewoong Jang
-# 2021-01-09
+# 2024-01-23
 #
 run:
   #
@@ -20,6 +20,7 @@ run:
     html: html
     latex: tex
     markdown: md;tablefmt=github  # "pandas >=v1.0.0" and "tabulate" required
+  is_excel_bkg: True
   header:
     - Name
     - Nawabari
