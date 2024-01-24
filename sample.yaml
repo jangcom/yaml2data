@@ -20,7 +20,9 @@ run:
     html: html
     latex: tex
     markdown: md;tablefmt=github  # "pandas >=v1.0.0" and "tabulate" required
-  is_excel_bkg: True
+  ctrls:
+    is_index: False
+    is_excel_bkg: True
   header:
     - Name
     - Nawabari

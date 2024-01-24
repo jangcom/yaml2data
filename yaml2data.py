@@ -180,6 +180,8 @@ def mk_data(yml,
             spl = re.split(r'\s*[{}]\s*'.format(sep_ext_kwargs), ext_kwargs)
             out_fname = '{}.{}'.format(out_bname_w_path, spl[0])
             args_dct = {}
+            if not yml[active]['ctrls']['is_index']:
+                args_dct.update({'index': False})
             if len(spl) >= 2:
                 args = []
                 for arg in spl[1:]:
@@ -194,7 +196,8 @@ def mk_data(yml,
                     buf = open(out_fname, 'w', encoding='utf-8')  # Default
             else:  # All but to_markdown()
                 buf = out_fname
-            if fmt == 'excel' and yml[active]['is_excel_bkg']:
+            if (fmt == 'excel'
+                    and yml[active]['ctrls']['is_excel_bkg']):
                 meth_to_call = getattr(df.style.background_gradient(),
                                        'to_{}'.format(fmt))
             else:
